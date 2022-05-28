@@ -39,7 +39,7 @@ export const fetchRequests = () => async (dispatch: any, getState: any) => {
   }
 };
 
-export const addNewRequest = (data: any) => async (dispatch: any, getState: any) => {
+export const addNewRequest = (data: object) => async (dispatch: any, getState: any) => {
   try {
     fetch("http://localhost:7777/requests", {
       method: "POST",

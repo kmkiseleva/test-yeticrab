@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
+import AddRequestForm from "../components/AddRequestForm";
 import Request from "../components/Request";
+import Counter from "../components/Counter";
 import {
   fetchRequests,
-  addNewRequest,
   sortById,
   sortByСlientCompanyName,
 } from "../store/requestsReducer";
@@ -19,47 +20,13 @@ const RequestsList = () => {
   const [searchInputVisible, setSearchInputVisible] = useState(false);
   const [filter, setFilter] = useState("");
 
-  const [clientCompanyName, setClientCompanyName] = useState("");
-  const [driverInitials, setDriverInitials] = useState("");
-  const [driverPhone, setDriverPhone] = useState("");
-  const [comments, setComments] = useState("");
-  const [atiCode, setAtiCode] = useState("");
-
   useEffect(() => {
     dispatch(fetchRequests());
   }, [dispatch]);
 
-  const resetForm = () => {
-    setClientCompanyName("");
-    setDriverInitials("");
-    setDriverPhone("");
-    setComments("");
-    setAtiCode("");
-  };
-
   const keyPressHandler = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") {
       setFilter(filter);
-    }
-  };
-
-  const onSubmitDataHandler = (e: any): void => {
-    e.preventDefault();
-    if (clientCompanyName && driverInitials && driverPhone && atiCode) {
-      dispatch(
-        addNewRequest({
-          clientCompanyName,
-          driverInitials,
-          driverPhone,
-          comments,
-          atiCode,
-        })
-      );
-      dispatch(fetchRequests());
-      resetForm();
-      setVisible(false);
-    } else {
-      alert("Введите данные...");
     }
   };
 
@@ -117,64 +84,7 @@ const RequestsList = () => {
 
       {error && <h3>Ошибка соединения с сервером...</h3>}
 
-      {visible && admin && (
-        <div className="add-request-form">
-          <label htmlFor="title" className="active">
-            Название фирмы клиента
-          </label>
-          <input
-            onChange={(e) => setClientCompanyName(e.target.value)}
-            value={clientCompanyName}
-            type="text"
-            id="name"
-          />
-          <label htmlFor="title" className="active">
-            ФИО перевозчика
-          </label>
-          <input
-            onChange={(e) => setDriverInitials(e.target.value)}
-            value={driverInitials}
-            type="text"
-            id="surname"
-          />
-          <label htmlFor="title" className="active">
-            Контактный телефон перевозчика
-          </label>
-          <input
-            onChange={(e) => setDriverPhone(e.target.value)}
-            value={driverPhone}
-            type="text"
-            id="number"
-            placeholder="+79995554433"
-          />
-          <label htmlFor="title" className="active">
-            Комментарии
-          </label>
-          <input
-            onChange={(e) => setComments(e.target.value)}
-            value={comments}
-            type="text"
-            id="comments"
-          />
-          <label htmlFor="title" className="active">
-            ATI код сети перевозчика
-          </label>
-          <input
-            onChange={(e) => setAtiCode(e.target.value)}
-            value={atiCode}
-            type="text"
-            id="atiCode"
-          />
-          <button
-            className="btn waves-effect waves-light pink darken-3 right"
-            type="submit"
-            onClick={(e) => onSubmitDataHandler(e)}
-          >
-            Сохранить заявку
-            <i className="material-icons right">send</i>
-          </button>
-        </div>
-      )}
+      {visible && admin && <AddRequestForm />}
 
       {!loading && (
         <div className="requests">
@@ -214,14 +124,7 @@ const RequestsList = () => {
         </div>
       )}
 
-      <div className="counter">
-        Всего <span>{items.length}</span>{" "}
-        {items.length === 1
-          ? "заявка"
-          : items.length === 0 || items.length > 4
-          ? "заявок"
-          : "заявки"}
-      </div>
+      <Counter />
     </>
   );
 };
