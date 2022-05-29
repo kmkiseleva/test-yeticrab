@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
+import Loader from "../components/Loader";
+import SortBlock from "../components/SortBlock";
 import AddRequestForm from "../components/AddRequestForm";
 import Request from "../components/Request";
 import Counter from "../components/Counter";
-import {
-  fetchRequests,
-  sortById,
-  sortByСlientCompanyName,
-} from "../store/requestsReducer";
+import { fetchRequests } from "../store/requestsReducer";
 
 const RequestsList = () => {
   const dispatch = useDispatch();
@@ -61,26 +59,9 @@ const RequestsList = () => {
         )}
       </div>
 
-      <div className="sort__block">
-        <button
-          className="btn waves-effect waves-light pink darken-3"
-          onClick={() => dispatch(sortById(items))}
-        >
-          Сортировать по номеру заявки
-        </button>
-        <button
-          className="btn waves-effect waves-light pink darken-3"
-          onClick={() => dispatch(sortByСlientCompanyName(items))}
-        >
-          Сортировать по фирме
-        </button>
-      </div>
+      <SortBlock />
 
-      {loading && (
-        <div className="progress">
-          <div className="indeterminate"></div>
-        </div>
-      )}
+      {loading && <Loader />}
 
       {error && <h3>Ошибка соединения с сервером...</h3>}
 

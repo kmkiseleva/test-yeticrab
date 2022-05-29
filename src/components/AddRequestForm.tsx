@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchRequests, addNewRequest } from "../store/requestsReducer";
+import { validatePhone } from "../utils/validation";
 
 const AddRequestForm = () => {
   const dispatch = useDispatch();
@@ -12,22 +13,12 @@ const AddRequestForm = () => {
   const [comments, setComments] = useState("");
   const [atiCode, setAtiCode] = useState("");
 
-  useEffect(() => {
-    dispatch(fetchRequests());
-  }, [dispatch]);
-
   const resetForm = () => {
     setClientCompanyName("");
     setDriverInitials("");
     setDriverPhone("");
     setComments("");
     setAtiCode("");
-  };
-
-  const validatePhone = (phone: string) => {
-    let regex =
-      /^(\+7)?[\s]?\(?[489][0-9]{2}\)?[\s]?[0-9]{3}[\s]?[0-9]{2}[\s]?[0-9]{2}$/;
-    return regex.test(phone);
   };
 
   const onSubmitDataHandler = (e: any): void => {
@@ -52,9 +43,7 @@ const AddRequestForm = () => {
       resetForm();
       setVisible(false);
     } else {
-      if (validatePhone(driverPhone)) alert("Введите данные...");
-      else if (!validatePhone(driverPhone))
-        alert("Некорректный номер телефона");
+      alert("Некорректные или неполные данные...");
     }
   };
 
